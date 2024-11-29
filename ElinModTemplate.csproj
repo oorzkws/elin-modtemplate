@@ -1,0 +1,69 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <Product>$(AssemblyName)</Product>
+        <Description>NoSquashOnLoad for Elin</Description>
+        <FileVersion>0.1.0</FileVersion>
+        <Version>$(FileVersion)</Version>
+        <PackageId>ElinModTemplate</PackageId>
+    </PropertyGroup>
+    <PropertyGroup>
+        <ElinGamePath>A:\SteamLibrary\steamapps\common\Elin</ElinGamePath>
+        <!--<AssemblySearchPaths>$(AssemblySearchPaths);$(ElinGamePath)\Elin_Data\Managed;$(ElinGamePath)\BepInEx\core</AssemblySearchPaths>-->
+        <OutputPath>$(ElinGamePath)\Package\Mod_$(AssemblyName)\</OutputPath>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <Nullable>annotations</Nullable>
+        <LangVersion>13.0</LangVersion>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <Optimize>true</Optimize>
+        <DebugSymbols>false</DebugSymbols>
+        <DebugType>none</DebugType>
+        <!-- Using nuget packages results in IgnoresAccessChecksToAttribute being duplicated between Publicizer and MonoMod.Utils -->
+        <NoWarn>0436</NoWarn>
+        <RestoreAdditionalProjectSources>
+            https://api.nuget.org/v3/index.json;
+            https://nuget.bepinex.dev/v3/index.json;
+            https://nuget.samboy.dev/v3/index.json
+        </RestoreAdditionalProjectSources>
+    </PropertyGroup>
+    <ItemGroup>
+        <Content Include="package.xml" CopyToOutputDirectory="PreserveNewest"/>
+        <Content Include="preview.jpg" CopyToOutputDirectory="PreserveNewest"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all"/>
+        <PackageReference Include="BepInEx.Unity" Version="6.0.0-pre.1" IncludeAssets="compile"/>
+        <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*"/>
+        <PackageReference Include="UnityEngine.Modules" Version="2021.3.34" IncludeAssets="compile"/>
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
+        <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all"/>
+    </ItemGroup>
+
+
+    <ItemGroup>
+        <!-- Handled by NuGet
+        <Reference Include="0Harmony" Private="False" HintPath="$(ElinGamePath)\BepInEx\core\0Harmony.dll"/>
+        <Reference Include="BepInEx.Core" Private="False" HintPath="$(ElinGamePath)\BepInEx\core\BepInEx.Core.dll"/>
+        <Reference Include="BepInEx.Unity" Private="False" HintPath="$(ElinGamePath)\BepInEx\core\BepInEx.Unity.dll"/>
+        <Reference Include="UnityEngine" Private="False" Aliases="UnityCore" HintPath="$(ElinGamePath)\Elin_Data\Managed\UnityEngine.dll"/>
+        -->
+        <Reference Include="1Fishery" Private="True"/>
+        <Reference Include="Elin" Private="False" HintPath="$(ElinGamePath)\Elin_Data\Managed\Elin.dll"/>
+        <Reference Include="Plugins.BaseCore" Private="False" HintPath="$(ElinGamePath)\Elin_Data\Managed\Plugins.BaseCore.dll"/>
+        <Reference Include="Plugins.UI" Private="False" HintPath="$(ElinGamePath)\Elin_Data\Managed\Plugins.UI.dll"/>
+        <Reference Include="UnityEngine.CoreModule" Private="False" Aliases="UnityCore" HintPath="$(ElinGamePath)\Elin_Data\Managed\UnityEngine.CoreModule.dll"/>
+
+        <PackageReference Include="Krafs.Publicizer" Version="*">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <Publicize Include="0Harmony"/>
+    </ItemGroup>
+</Project>
