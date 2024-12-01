@@ -8,6 +8,9 @@ internal static class TranspilerExample {
 
     private static bool IsSafeTransition() {
         Logging.Log($"Transition from {EMono.player.lastTransition.lastZone.GetType().Name} to {EMono._zone.GetType().Name}");
+        if (ElinModTemplate.Config!.TryGetEntry<bool>("Display", "LogExample", out var logExample) && logExample.Value) {
+            Logging.Log("LogExample setting is enabled");
+        }
         return EMono._zone is Zone_Tent || EMono.player.lastTransition.lastZone is Zone_Tent;
     }
 

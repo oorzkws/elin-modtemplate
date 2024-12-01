@@ -2,7 +2,7 @@
 <Meta>
     <title>Elin Mod Template</title>
     <id>elinmodtemplate</id>
-    <author>mute</author>
+    <author>Author</author>
     <builtin>false</builtin>
     <loadPriority>100</loadPriority>
     <version>0.23.39</version>

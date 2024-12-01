@@ -1,10 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <Product>$(AssemblyName)</Product>
-        <Description>NoSquashOnLoad for Elin</Description>
+        <Company>Author</Company>
+        <Description>Mod Template for Elin</Description>
         <FileVersion>0.1.0</FileVersion>
-        <Version>$(FileVersion)</Version>
-        <PackageId>ElinModTemplate</PackageId>
     </PropertyGroup>
     <PropertyGroup>
         <ElinGamePath>A:\SteamLibrary\steamapps\common\Elin</ElinGamePath>
@@ -16,7 +14,7 @@
     <PropertyGroup>
         <TargetFramework>netstandard2.1</TargetFramework>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-        <Nullable>annotations</Nullable>
+        <Nullable>enable</Nullable>
         <LangVersion>13.0</LangVersion>
         <PlatformTarget>AnyCPU</PlatformTarget>
         <Optimize>true</Optimize>
