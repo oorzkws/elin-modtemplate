@@ -16,6 +16,8 @@ internal class ElinModTemplate : BaseUnityPlugin {
         _ = new Settings(Config);
         var harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);
         harmony.PatchAll();
-        Logging.Log($"{MyPluginInfo.PLUGIN_NAME} version {MyPluginInfo.PLUGIN_VERSION} successfully loaded", LogLevel.Message);
+        if (Config.TryGetEntry<bool>("Display", "LogExample", out var shouldLog) && shouldLog.Value) {
+            Logging.Log($"{MyPluginInfo.PLUGIN_NAME} version {MyPluginInfo.PLUGIN_VERSION} successfully loaded", LogLevel.Message);
+        }
     }
 }
