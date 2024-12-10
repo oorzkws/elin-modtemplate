@@ -91,6 +91,30 @@ internal static class EzTranspiler {
     }
 
     /// <summary>
+    ///     Replaces the pattern with the replacement. This is a naive implementation - if you need labels, DIY it.
+    /// </summary>
+    /// <param name="match">the CodeMatcher instance to use</param>
+    /// <param name="pattern">instructions to match, the beginning of this match is where the replacement begins</param>
+    /// <param name="replacement">the new instructions</param>
+    /// <param name="replace">
+    ///     Whether we should keep labels and set the opcodes/operands instead of recreating the
+    ///     CodeInstruction
+    /// </param>
+    /// <param name="suppress">Whether to suppress the log message on a failed match</param>
+    /// <returns></returns>
+    internal static CodeMatcher Replace(this CodeMatcher match, CodeInstructions pattern, CodeInstructions replacement, bool replace = true, bool suppress = false) {
+        var patternArray = pattern.Select(entry => {
+            switch (entry) {
+                case CodeMatch codeMatch:
+                    codeMatch.predicate ??= candidate => entry == candidate;
+                    return codeMatch;
+                default: return new CodeMatch(candidate => new Container(entry) == candidate);
+            }
+        }).ToArray();
+        return Replace(match, patternArray, replacement, replace, suppress);
+    }
+
+    /// <summary>
     ///     Prevents the compiler from removing a given local
     /// </summary>
     /// <param name="variable">The local to protect</param>
@@ -124,8 +148,8 @@ internal static class EzTranspiler {
 
             // Arg indexes get shifted by 1, as the method is made static with "this" as the 0th arg. We shift them backwards here to match.
             if (instruction.opcode.LoadsArgument() || instruction.opcode.StoresArgument()) {
-                // FishInstruction cast allows us to avoid branching on all the different starg_n/ldarg_n
-                var index = new FishInstruction(instruction).GetIndex() - 1;
+                // Container cast allows us to avoid branching on all the different starg_n/ldarg_n
+                var index = new Container(instruction).GetIndex() - 1;
                 // Create a copy with the proper index
                 var copy = instruction.IsLdarg() ? FishTranspiler.Argument(index) : FishTranspiler.StoreArgument(index);
                 // Push the changes back to the instruction. This allows us to maintain block/label attributes.
@@ -136,7 +160,7 @@ internal static class EzTranspiler {
             // For methods that just declare a local, they have to pin it using HarmonyPatches.Pin. We remove this from the match.
             // Doing so is a two-instruction process (Ldloca, Call) so we remove the last and current instructions
             if (instructions.Count > 0) {
-                var lastInstruction = new FishInstruction(instructions.Last());
+                var lastInstruction = new Container(instructions.Last());
                 if (lastInstruction.OpCode.LoadsLocalVariable()) {
                     // Fetch the instruction for Pin<T> where T is whatever type lastInstruction accesses...
                     var genericPin = Fish.Call(typeof(EzTranspiler), "Pin", generics: [locals[lastInstruction.GetIndex()].LocalType ?? throw new InvalidOperationException()]);

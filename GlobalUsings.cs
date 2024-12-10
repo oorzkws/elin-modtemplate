@@ -9,5 +9,5 @@ global using System.Reflection;
 global using FisheryLib;
 global using HarmonyLib;
 global using CodeInstructions = System.Collections.Generic.IEnumerable<HarmonyLib.CodeInstruction>;
-global using FishInstruction = FisheryLib.FishTranspiler.Container;
+global using Container = FisheryLib.FishTranspiler.Container;
 global using Fish = FisheryLib.FishTranspiler;
