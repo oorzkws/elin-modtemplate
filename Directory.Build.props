@@ -1,8 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
+    <!-- These form the MyPluginInfo, built by BepInEx.PluginInfoProps -->
     <PropertyGroup>
         <Product>$(AssemblyName)</Product>
         <BepInExPluginGuid>$(Company).$(AssemblyName)</BepInExPluginGuid>
         <Version>$(FileVersion)</Version>
     </PropertyGroup>
+    <!-- Static compile options -->
+    <PropertyGroup>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <Optimize>true</Optimize>
+        <DebugSymbols>false</DebugSymbols>
+        <DebugType>none</DebugType>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+        <!-- Using nuget packages results in IgnoresAccessChecksToAttribute being duplicated between Publicizer and MonoMod.Utils -->
+        <NoWarn>0436</NoWarn>
+        <RestoreAdditionalProjectSources>
+            https://api.nuget.org/v3/index.json;
+            https://nuget.bepinex.dev/v3/index.json;
+            https://nuget.samboy.dev/v3/index.json
+        </RestoreAdditionalProjectSources>
+    </PropertyGroup>
+    <!-- Always-applicable deps -->
+    <ItemGroup>
+        <!-- Handled by NuGet
+        <Reference Include="0Harmony" Private="False" HintPath="$(ElinGamePath)\BepInEx\core\0Harmony.dll"/>
+        <Reference Include="BepInEx.Core" Private="False" HintPath="$(ElinGamePath)\BepInEx\core\BepInEx.Core.dll"/>
+        <Reference Include="BepInEx.Unity" Private="False" HintPath="$(ElinGamePath)\BepInEx\core\BepInEx.Unity.dll"/>
+        <Reference Include="UnityEngine" Private="False" Aliases="UnityCore" HintPath="$(ElinGamePath)\Elin_Data\Managed\UnityEngine.dll"/>
+        -->
+        <Reference Include="1Fishery" Private="True"/>
+        <Reference Include="Elin" Private="False" HintPath="$(ElinGamePath)\Elin_Data\Managed\Elin.dll"/>
+        <Reference Include="Plugins.BaseCore" Private="False" HintPath="$(ElinGamePath)\Elin_Data\Managed\Plugins.BaseCore.dll"/>
+        <PackageReference Include="Krafs.Publicizer" Version="*">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <Publicize Include="0Harmony"/>
+    </ItemGroup>
+    <!-- Copied to output -->
+    <ItemGroup>
+        <Content Include="package.xml" CopyToOutputDirectory="PreserveNewest"/>
+        <Content Include="preview.jpg" CopyToOutputDirectory="PreserveNewest"/>
+    </ItemGroup>
+    <!-- BepInEx Packages -->    
+    <ItemGroup>
+        <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all"/>
+        <PackageReference Include="BepInEx.Unity" Version="6.0.0-pre.1" IncludeAssets="compile"/>
+        <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*"/>
+        <PackageReference Include="UnityEngine.Modules" Version="2021.3.34" IncludeAssets="compile"/>
+    </ItemGroup>
+    <!-- Deps for netxyz if not using netstandard -->
+    <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
+        <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all"/>
+    </ItemGroup>
 </Project>
