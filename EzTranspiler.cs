@@ -106,7 +106,7 @@ internal static class EzTranspiler {
         var patternArray = pattern.Select(entry => {
             switch (entry) {
                 case CodeMatch codeMatch:
-                    codeMatch.predicate ??= candidate => entry == candidate;
+                    codeMatch.predicate ??= candidate => new Container(entry) == candidate;
                     return codeMatch;
                 default: return new CodeMatch(candidate => new Container(entry) == candidate);
             }
@@ -130,6 +130,7 @@ internal static class EzTranspiler {
     /// <param name="method">The method to convert</param>
     /// <returns>A set of CodeInstructions representing the method given</returns>
     /// <remarks>Declared locals need to be pinned with Pin(ref local)</remarks>
+    // TODO: Fix that index modifications break if called within a compiler-generated class.
     internal static CodeInstructions InstructionSignature(Delegate method) {
         var instructions = new List<CodeInstruction>();
         var locals = method.Method.GetMethodBody()!.LocalVariables;
