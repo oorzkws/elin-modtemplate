@@ -6,8 +6,9 @@
     </PropertyGroup>
     <PropertyGroup>
         <ElinGamePath>A:\SteamLibrary\steamapps\common\Elin</ElinGamePath>
-        <!--<AssemblySearchPaths>$(AssemblySearchPaths);$(ElinGamePath)\Elin_Data\Managed;$(ElinGamePath)\BepInEx\core</AssemblySearchPaths>-->
         <OutputPath>$(ElinGamePath)\Package\Mod_$(AssemblyName)\</OutputPath>
+        <!-- Uncomment to see the variant of TranspilerExample -->
+        <!-- <DefineConstants>TRANSPILERDEMO</DefineConstants> -->
     </PropertyGroup>
     <PropertyGroup>
         <TargetFramework>netstandard2.1</TargetFramework>
