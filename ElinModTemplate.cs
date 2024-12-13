@@ -8,7 +8,7 @@ namespace ElinModTemplate;
 internal class ElinModTemplate : BaseUnityPlugin {
     internal static new ManualLogSource? Logger { get; private set; }
     // Access to settings values
-    public static new ConfigFile? Config { get; private set; }
+    internal static new ConfigFile? Config { get; private set; }
     // Used for access to hook events
     private static Settings settings = null!;
     // Access to harmony instance

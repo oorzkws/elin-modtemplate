@@ -142,7 +142,7 @@ internal static class EzTranspiler {
                 continue;
             }
 
-            // Nops can be used for alignment or optimization, but we don't want that here as it can mess up our matching
+            // Nop can be used for alignment or optimization, but we don't want that here as it can mess up our matching
             if (instruction.opcode == OpCodes.Nop) {
                 continue;
             }

@@ -57,7 +57,7 @@ public static class HarmonyExtensions {
     /// <param name="self">PatchInfo</param>
     /// <param name="patchType">HarmonyPatchType</param>
     /// <returns></returns>
-    public static IEnumerable<Patch> OfType(this PatchInfo self, HarmonyPatchType patchType) {
+    private static IEnumerable<Patch> OfType(this PatchInfo self, HarmonyPatchType patchType) {
         return patchType switch {
             HarmonyPatchType.All           => Enum.GetValues(typeof(HarmonyPatchType)).Cast<HarmonyPatchType>().Where(subtype => subtype != HarmonyPatchType.All).SelectMany(self.OfType),
             HarmonyPatchType.Prefix        => self.prefixes,
