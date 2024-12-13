@@ -1,7 +1,7 @@
 ﻿namespace ElinModTemplate.Extensions;
 
 public static class HarmonyExtensions {
-    
+
     /// <summary>
     /// Applies the given patcher, but only with the patches given in patchMethods
     /// </summary>

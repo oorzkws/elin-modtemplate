@@ -1,8 +1,7 @@
 ﻿#nullable disable
 extern alias UnityCore;
-using UnityCore::UnityEngine;
 using static ElinModTemplate.EzTranspiler;
-using static FisheryLib.FishTranspiler;
+using Debug = UnityCore::UnityEngine.Debug;
 
 namespace ElinModTemplate.Patches;
 
@@ -18,7 +17,7 @@ internal static class TranspilerExample {
     [UsedImplicitly]
     public static CodeInstructions Transpiler(CodeInstructions instructions, MethodBase method) {
         var editor = new CodeMatcher(instructions).Start();
-        
+
         // Toggle in the csproj
         #if TRANSPILERDEMO
         // Manual method
@@ -32,11 +31,12 @@ internal static class TranspilerExample {
         // Automatic method
         editor.Replace(InstructionSignature(() => Debug.Log("Building Sunmap")), []);
         #endif
-        
+
         // Done
         return editor.InstructionEnumeration();
     }
 }
+
 [HarmonyPatch(typeof(VirtualDate), nameof(VirtualDate.BuildSunMap))]
 internal static class PostfixExample {
     [HarmonyPostfix, SettingDependentPatch("Display", "LogExample")]
