@@ -40,14 +40,14 @@ public partial class Settings {
         }
         if (methodsWithPatches.TryGetValue((section, key), out var methods)) {
             methods.Do(pair => {
-                Logging.Log($"{(value ? "P" : "Unp")}atching {pair.Key.containerType.FullName} because of {section}.{key}");
+                pair.Value.Do(m => Logging.Log($"{(value ? "P" : "Unp")}atching {pair.Key.containerType.FullName}:{m.Name} because of {section}.{key}"));
                 if (value)
                     harmony.PatchPartial(pair.Key, pair.Value);
                 else
                     harmony.UnpatchPartial(pair.Key, pair.Value);
             });
         }
-        
+
     }
 
 
@@ -76,7 +76,7 @@ public partial class Settings {
                 var methodSetting = method.GetCustomAttributes(true).OfType<SettingDependentPatchAttribute>().FirstOrDefault() ?? typeSetting;
                 if (methodSetting is null)
                     continue; // Neither class nor method has decoration
-                Logging.Log($"Toggle-able patch discovered:\n\t{patch.info.method.DeclaringType!.FullName}:{patch.info.method.Name} -> {patch.info.GetOriginalMethod().DeclaringType!.FullName}:{patch.info.GetOriginalMethod().Name}");
+                Logging.Log($"Toggle-able patch discovered, controlled by {methodSetting.Section}.{methodSetting.Key}\n\t{patch.info.method.DeclaringType!.FullName}:{patch.info.method.Name} -> {patch.info.GetOriginalMethod().DeclaringType!.FullName}:{patch.info.GetOriginalMethod().Name}");
                 yield return (method, methodSetting, processedClass);
             }
         }

@@ -11,10 +11,6 @@ namespace ElinModTemplate.Patches;
 [HarmonyPatch(typeof(VirtualDate), nameof(VirtualDate.BuildSunMap)), SettingDependentPatch("Display", "RemoveSunmapSpam")]
 internal static class TranspilerExample {
     [UsedImplicitly]
-    private static bool ReturnTrue() {
-        return true;
-    }
-    [UsedImplicitly]
     public static CodeInstructions Transpiler(CodeInstructions instructions, MethodBase method) {
         var editor = new CodeMatcher(instructions).Start();
 
@@ -39,7 +35,8 @@ internal static class TranspilerExample {
 
 [HarmonyPatch(typeof(VirtualDate), nameof(VirtualDate.BuildSunMap))]
 internal static class PostfixExample {
-    [HarmonyPostfix, SettingDependentPatch("Display", "LogExample")]
+    [HarmonyPostfix, SettingDependentPatch("Display", "LogExample"), UsedImplicitly]
+    // ReSharper disable once InconsistentNaming
     private static void Something(VirtualDate __instance) {
         Logging.Log("Called!");
     }
