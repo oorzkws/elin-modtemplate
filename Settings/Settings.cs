@@ -74,9 +74,13 @@ public partial class Settings {
             foreach (var patch in processedClass.patchMethods) {
                 var method = patch.info.method;
                 var methodSetting = method.GetCustomAttributes(true).OfType<SettingDependentPatchAttribute>().FirstOrDefault() ?? typeSetting;
-                if (methodSetting is null)
+                if (methodSetting is null || patch.type is null)
                     continue; // Neither class nor method has decoration
-                Logging.Log($"Toggle-able patch discovered, controlled by {methodSetting.Section}.{methodSetting.Key}\n\t{patch.info.method.DeclaringType!.FullName}:{patch.info.method.Name} -> {patch.info.GetOriginalMethod().DeclaringType!.FullName}:{patch.info.GetOriginalMethod().Name}");
+                var methodName = method.FullQualifiedName();
+                Logging.Log($"Toggle-able patch discovered, controlled by {methodSetting.Section}.{methodSetting.Key}");
+                method.OriginalMethods(patch.type.Value, harmony.Id).Do(original =>
+                    Logging.Log($"\t{methodName} -> {original.FullQualifiedName()}")
+                );
                 yield return (method, methodSetting, processedClass);
             }
         }
